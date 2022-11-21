@@ -24,6 +24,10 @@ import javax.swing.UIManager;
 import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JSeparator;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class PedidoJFrame extends JFrame {
 	private JTextField medicamentoNombreTextField;
@@ -54,49 +58,38 @@ public class PedidoJFrame extends JFrame {
 		setTitle("UNIR - Debugging en Eclipse");
 		setBounds(100, 100, 450, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		
 		JLabel medicamentoNombreLabel = new JLabel("Nombre del medicamento:");
 		medicamentoNombreLabel.setVerticalAlignment(SwingConstants.TOP);
 		medicamentoNombreLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		getContentPane().add(medicamentoNombreLabel);
 		
 		medicamentoNombreTextField = new JTextField();
-		getContentPane().add(medicamentoNombreTextField);
 		medicamentoNombreTextField.setColumns(15);
 		
 		JLabel medicamentoTipoLabel = new JLabel("Tipo de medicamento:");
 		medicamentoTipoLabel.setVerticalAlignment(SwingConstants.TOP);
 		medicamentoTipoLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		getContentPane().add(medicamentoTipoLabel);
 		
 		JComboBox medicamentoTipoComboBox = new JComboBox();
 		medicamentoTipoComboBox.setModel(new DefaultComboBoxModel(new String[] {"Analgésico", "Analéptico", "Anestésico", "Antiácido", "Antidepresivo", "Antibiótico"}));
 		medicamentoTipoComboBox.setMaximumRowCount(15);
-		getContentPane().add(medicamentoTipoComboBox);
 		
 		JLabel medicamentoCantidadLabel = new JLabel("Cantidad de medicamento:");
 		medicamentoCantidadLabel.setVerticalAlignment(SwingConstants.TOP);
 		medicamentoCantidadLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		getContentPane().add(medicamentoCantidadLabel);
 		
 		medicamentoCantidadTextField = new JTextField();
-		getContentPane().add(medicamentoCantidadTextField);
 		medicamentoCantidadTextField.setColumns(15);
 		
 		JLabel medicamentoDistribuidorLabel = new JLabel("Nombre del Distribuidor:");
 		medicamentoDistribuidorLabel.setVerticalAlignment(SwingConstants.TOP);
 		medicamentoDistribuidorLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		getContentPane().add(medicamentoDistribuidorLabel);
 		
 		JRadioButton medicamentoDistribuidorRadioButton_1 = new JRadioButton("Cofarma");
-		getContentPane().add(medicamentoDistribuidorRadioButton_1);
 		
 		JRadioButton medicamentoDistribuidorRadioButton_2 = new JRadioButton("Empsephar");
-		getContentPane().add(medicamentoDistribuidorRadioButton_2);
 		
 		JRadioButton medicamentoDistribuidorRadioButton_3 = new JRadioButton("Cemefar");
-		getContentPane().add(medicamentoDistribuidorRadioButton_3);
 		
 		ButtonGroup medicamentoDistribuidorRadioButtonGroup = new ButtonGroup();
 		medicamentoDistribuidorRadioButtonGroup.add(medicamentoDistribuidorRadioButton_1);
@@ -107,24 +100,23 @@ public class PedidoJFrame extends JFrame {
 		JLabel medicamentoEntregaLabel = new JLabel("Sucursal de entrega:");
 		medicamentoEntregaLabel.setVerticalAlignment(SwingConstants.TOP);
 		medicamentoEntregaLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		getContentPane().add(medicamentoEntregaLabel);
 		
 		JCheckBox medicamentoEntregaSucursalPrincipalCheckBox = new JCheckBox("Sucursal Principal");
-		getContentPane().add(medicamentoEntregaSucursalPrincipalCheckBox);
 		
 		JCheckBox medicamentoEntregaSucursalSecundariaCheckBox = new JCheckBox("Sucursal Secundaria");
-		getContentPane().add(medicamentoEntregaSucursalSecundariaCheckBox);
 		
 		JButton medicamentoConfirmarButton = new JButton("Confirmar");
 		medicamentoConfirmarButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("On Confirmar:mouseClicked");
+				if(!validar()) {
+					
+				}
 			}
 		});
 		
 		medicamentoConfirmarButton.setForeground(UIManager.getColor("RadioButton.light"));
-		getContentPane().add(medicamentoConfirmarButton);
 		
 		JButton medicamentoCancelarButton = new JButton("Borrar");
 		medicamentoCancelarButton.addMouseListener(new MouseAdapter() {
@@ -145,8 +137,105 @@ public class PedidoJFrame extends JFrame {
 			}
 		});
 		medicamentoCancelarButton.setForeground(UIManager.getColor("RadioButton.select"));
-		getContentPane().add(medicamentoCancelarButton);
+		
+		JLabel medicamentoValidaciónLabel = new JLabel("");
+		medicamentoValidaciónLabel.setForeground(UIManager.getColor("Button.select"));
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(4)
+							.addComponent(medicamentoDistribuidorLabel)
+							.addGap(5)
+							.addComponent(medicamentoDistribuidorRadioButton_1)
+							.addGap(5)
+							.addComponent(medicamentoDistribuidorRadioButton_2)
+							.addGap(5)
+							.addComponent(medicamentoDistribuidorRadioButton_3))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(6)
+							.addComponent(medicamentoEntregaLabel)
+							.addGap(5)
+							.addComponent(medicamentoEntregaSucursalPrincipalCheckBox)
+							.addGap(5)
+							.addComponent(medicamentoEntregaSucursalSecundariaCheckBox))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(95)
+							.addComponent(medicamentoConfirmarButton)
+							.addGap(5)
+							.addComponent(medicamentoCancelarButton))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(medicamentoValidaciónLabel, GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(medicamentoCantidadLabel)
+								.addComponent(medicamentoNombreLabel)
+								.addComponent(medicamentoTipoLabel))
+							.addGap(37)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(medicamentoNombreTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(medicamentoTipoComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(medicamentoCantidadTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+					.addGap(4))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(5)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(medicamentoNombreLabel)
+						.addComponent(medicamentoNombreTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(medicamentoTipoLabel)
+						.addComponent(medicamentoTipoComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(medicamentoCantidadLabel)
+						.addComponent(medicamentoCantidadTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(5)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(3)
+							.addComponent(medicamentoDistribuidorLabel))
+						.addComponent(medicamentoDistribuidorRadioButton_1)
+						.addComponent(medicamentoDistribuidorRadioButton_2)
+						.addComponent(medicamentoDistribuidorRadioButton_3))
+					.addGap(5)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(3)
+							.addComponent(medicamentoEntregaLabel))
+						.addComponent(medicamentoEntregaSucursalPrincipalCheckBox)
+						.addComponent(medicamentoEntregaSucursalSecundariaCheckBox))
+					.addGap(5)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(medicamentoConfirmarButton)
+						.addComponent(medicamentoCancelarButton))
+					.addGap(14)
+					.addComponent(medicamentoValidaciónLabel)
+					.addContainerGap(32, Short.MAX_VALUE))
+		);
+		getContentPane().setLayout(groupLayout);
 
+	}
+	
+	public boolean validar() {
+		System.out.println("On validar");
+		
+		if(esAlfanumérico(medicamentoNombreTextField.getText())){
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean esAlfanumérico(String s) {
+		return s != null && s.matches("^[a-zA-Z0-9]*$");
 	}
 
 }
