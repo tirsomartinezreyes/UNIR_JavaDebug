@@ -11,6 +11,8 @@ import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -20,6 +22,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 import java.awt.SystemColor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class PedidoJFrame extends JFrame {
 	private JTextField medicamentoNombreTextField;
@@ -40,6 +44,7 @@ public class PedidoJFrame extends JFrame {
 			}
 		});
 	}
+	
 
 	/**
 	 * Create the frame.
@@ -93,6 +98,12 @@ public class PedidoJFrame extends JFrame {
 		JRadioButton medicamentoDistribuidorRadioButton_3 = new JRadioButton("Cemefar");
 		getContentPane().add(medicamentoDistribuidorRadioButton_3);
 		
+		ButtonGroup medicamentoDistribuidorRadioButtonGroup = new ButtonGroup();
+		medicamentoDistribuidorRadioButtonGroup.add(medicamentoDistribuidorRadioButton_1);
+		medicamentoDistribuidorRadioButtonGroup.add(medicamentoDistribuidorRadioButton_2);
+		medicamentoDistribuidorRadioButtonGroup.add(medicamentoDistribuidorRadioButton_3);
+		
+		
 		JLabel medicamentoEntregaLabel = new JLabel("Sucursal de entrega:");
 		medicamentoEntregaLabel.setVerticalAlignment(SwingConstants.TOP);
 		medicamentoEntregaLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -105,10 +116,34 @@ public class PedidoJFrame extends JFrame {
 		getContentPane().add(medicamentoEntregaSucursalSecundariaCheckBox);
 		
 		JButton medicamentoConfirmarButton = new JButton("Confirmar");
-		medicamentoConfirmarButton.setForeground(UIManager.getColor("textHighlight"));
+		medicamentoConfirmarButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println("On Confirmar:mouseClicked");
+			}
+		});
+		
+		medicamentoConfirmarButton.setForeground(UIManager.getColor("RadioButton.light"));
 		getContentPane().add(medicamentoConfirmarButton);
 		
 		JButton medicamentoCancelarButton = new JButton("Borrar");
+		medicamentoCancelarButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println("On Borrar:mouseClicked");
+				medicamentoNombreTextField.setText("");
+				medicamentoTipoComboBox.setSelectedItem("Analgésico");
+				medicamentoCantidadTextField.setText("");
+				medicamentoDistribuidorRadioButton_1.setSelected(false);
+				medicamentoDistribuidorRadioButton_2.setSelected(false);
+				medicamentoDistribuidorRadioButton_3.setSelected(false);
+				medicamentoDistribuidorRadioButtonGroup.clearSelection();
+				medicamentoEntregaSucursalPrincipalCheckBox.setSelected(false);
+				medicamentoEntregaSucursalSecundariaCheckBox.setSelected(false);
+				
+				
+			}
+		});
 		medicamentoCancelarButton.setForeground(UIManager.getColor("RadioButton.select"));
 		getContentPane().add(medicamentoCancelarButton);
 
