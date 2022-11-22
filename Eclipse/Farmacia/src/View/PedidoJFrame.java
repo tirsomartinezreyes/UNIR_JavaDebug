@@ -29,9 +29,11 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+
 public class PedidoJFrame extends JFrame {
 	private JTextField medicamentoNombreTextField;
 	private JTextField medicamentoCantidadTextField;
+	private JLabel medicamentoValidaciónLabel = new JLabel("");
 
 	/**
 	 * Launch the application.
@@ -132,13 +134,12 @@ public class PedidoJFrame extends JFrame {
 				medicamentoDistribuidorRadioButtonGroup.clearSelection();
 				medicamentoEntregaSucursalPrincipalCheckBox.setSelected(false);
 				medicamentoEntregaSucursalSecundariaCheckBox.setSelected(false);
-				
-				
+				medicamentoValidaciónLabel.setText("");
 			}
 		});
 		medicamentoCancelarButton.setForeground(UIManager.getColor("RadioButton.select"));
 		
-		JLabel medicamentoValidaciónLabel = new JLabel("");
+		
 		medicamentoValidaciónLabel.setForeground(UIManager.getColor("Button.select"));
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -226,16 +227,35 @@ public class PedidoJFrame extends JFrame {
 	
 	public boolean validar() {
 		System.out.println("On validar");
+		Boolean resultado = true;
 		
-		if(esAlfanumérico(medicamentoNombreTextField.getText())){
-			return false;
+		
+		if(resultado && !esVacío(medicamentoNombreTextField.getText())){
+			medicamentoValidaciónLabel.setText("Ingrese el nombre del medicamento");
+			resultado = false;
 		}
 		
-		return true;
+		if(resultado && !esAlfanumérico(medicamentoNombreTextField.getText())){
+			medicamentoValidaciónLabel.setText("El nombre del medicamento es incorrecto");
+			resultado = false;
+		}
+		
+		
+		
+		if(!resultado) {
+			System.out.println("validación no satisfecha");
+		}
+		
+		
+		return resultado;
 	}
 	
 	public static boolean esAlfanumérico(String s) {
 		return s != null && s.matches("^[a-zA-Z0-9]*$");
+	}
+	
+	public static boolean esVacío(String s) {
+		return s == null || s == "";
 	}
 
 }
