@@ -3,37 +3,38 @@ package View;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import java.awt.FlowLayout;
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JSlider;
 import javax.swing.JRadioButton;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import javax.swing.UIManager;
-import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JSeparator;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.Font;
 
 
 public class PedidoJFrame extends JFrame {
+	private static final long serialVersionUID = 1L;
 	private JTextField medicamentoNombreTextField;
 	private JTextField medicamentoCantidadTextField;
+	@SuppressWarnings("rawtypes")
+	private JComboBox medicamentoTipoComboBox = new JComboBox();
 	private JLabel medicamentoValidaciónLabel = new JLabel("");
+	private ButtonGroup medicamentoDistribuidorRadioButtonGroup = new ButtonGroup();
+	private JRadioButton medicamentoDistribuidorRadioButton_1 = new JRadioButton("Cofarma");
+	private JRadioButton medicamentoDistribuidorRadioButton_2 = new JRadioButton("Empsephar");
+	private JRadioButton medicamentoDistribuidorRadioButton_3 = new JRadioButton("Cemefar");
+	private JCheckBox medicamentoEntregaSucursalPrincipalCheckBox = new JCheckBox("Sucursal Principal");
+	private JCheckBox medicamentoEntregaSucursalSecundariaCheckBox = new JCheckBox("Sucursal Secundaria");
+
+	
 
 	/**
 	 * Launch the application.
@@ -55,6 +56,7 @@ public class PedidoJFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	@SuppressWarnings("unchecked")
 	public PedidoJFrame() {
 		setResizable(false);
 		setTitle("UNIR - Debugging en Eclipse");
@@ -72,8 +74,10 @@ public class PedidoJFrame extends JFrame {
 		medicamentoTipoLabel.setVerticalAlignment(SwingConstants.TOP);
 		medicamentoTipoLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		JComboBox medicamentoTipoComboBox = new JComboBox();
-		medicamentoTipoComboBox.setModel(new DefaultComboBoxModel(new String[] {"Analgésico", "Analéptico", "Anestésico", "Antiácido", "Antidepresivo", "Antibiótico"}));
+		@SuppressWarnings("rawtypes")
+		
+		String options[] = new String[] {"Analgésico", "Analéptico", "Anestésico", "Antiácido", "Antidepresivo", "Antibiótico"};
+		medicamentoTipoComboBox.setModel(new DefaultComboBoxModel<Object>(options));
 		medicamentoTipoComboBox.setMaximumRowCount(15);
 		
 		JLabel medicamentoCantidadLabel = new JLabel("Cantidad de medicamento:");
@@ -87,13 +91,8 @@ public class PedidoJFrame extends JFrame {
 		medicamentoDistribuidorLabel.setVerticalAlignment(SwingConstants.TOP);
 		medicamentoDistribuidorLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		JRadioButton medicamentoDistribuidorRadioButton_1 = new JRadioButton("Cofarma");
 		
-		JRadioButton medicamentoDistribuidorRadioButton_2 = new JRadioButton("Empsephar");
 		
-		JRadioButton medicamentoDistribuidorRadioButton_3 = new JRadioButton("Cemefar");
-		
-		ButtonGroup medicamentoDistribuidorRadioButtonGroup = new ButtonGroup();
 		medicamentoDistribuidorRadioButtonGroup.add(medicamentoDistribuidorRadioButton_1);
 		medicamentoDistribuidorRadioButtonGroup.add(medicamentoDistribuidorRadioButton_2);
 		medicamentoDistribuidorRadioButtonGroup.add(medicamentoDistribuidorRadioButton_3);
@@ -102,18 +101,14 @@ public class PedidoJFrame extends JFrame {
 		JLabel medicamentoEntregaLabel = new JLabel("Sucursal de entrega:");
 		medicamentoEntregaLabel.setVerticalAlignment(SwingConstants.TOP);
 		medicamentoEntregaLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		
-		JCheckBox medicamentoEntregaSucursalPrincipalCheckBox = new JCheckBox("Sucursal Principal");
-		
-		JCheckBox medicamentoEntregaSucursalSecundariaCheckBox = new JCheckBox("Sucursal Secundaria");
-		
+				
 		JButton medicamentoConfirmarButton = new JButton("Confirmar");
 		medicamentoConfirmarButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("On Confirmar:mouseClicked");
-				if(!validar()) {
-					
+				if(validar()) {
+					ResumenJFrame.main(obtenerResumen());
 				}
 			}
 		});
@@ -138,6 +133,8 @@ public class PedidoJFrame extends JFrame {
 			}
 		});
 		medicamentoCancelarButton.setForeground(UIManager.getColor("RadioButton.select"));
+		medicamentoValidaciónLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		medicamentoValidaciónLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
 		
 		
 		medicamentoValidaciónLabel.setForeground(UIManager.getColor("Button.select"));
@@ -230,13 +227,25 @@ public class PedidoJFrame extends JFrame {
 		Boolean resultado = true;
 		
 		
-		if(resultado && !esVacío(medicamentoNombreTextField.getText())){
+		if(resultado && !esAlfanumérico(medicamentoNombreTextField.getText())){
 			medicamentoValidaciónLabel.setText("Ingrese el nombre del medicamento");
 			resultado = false;
 		}
 		
-		if(resultado && !esAlfanumérico(medicamentoNombreTextField.getText())){
-			medicamentoValidaciónLabel.setText("El nombre del medicamento es incorrecto");
+		if(resultado && !esNúmeroPositivo(medicamentoCantidadTextField.getText())){
+			medicamentoValidaciónLabel.setText("La cantidad de medicamento es incorrecto");
+			resultado = false;
+		}
+		
+		
+		
+		if(resultado && !distribuidorSeleccionado()) {
+			medicamentoValidaciónLabel.setText("No se ha seleccionado un distribuidor");
+			resultado = false;
+		}
+		
+		if(resultado && !destinoSeleccionado()) {
+			medicamentoValidaciónLabel.setText("No se ha seleccionado un destino");
 			resultado = false;
 		}
 		
@@ -244,18 +253,152 @@ public class PedidoJFrame extends JFrame {
 		
 		if(!resultado) {
 			System.out.println("validación no satisfecha");
+			setTimeout(() -> limpiarMensajeDeError(), 3000);
 		}
 		
 		
 		return resultado;
 	}
 	
-	public static boolean esAlfanumérico(String s) {
-		return s != null && s.matches("^[a-zA-Z0-9]*$");
+	public void limpiarMensajeDeError() {
+		medicamentoValidaciónLabel.setText("");
 	}
 	
+	
 	public static boolean esVacío(String s) {
-		return s == null || s == "";
+		System.out.println(s);
+		if(s== null) {
+			return true;
+		}
+		
+		if(s=="") {
+			return true;
+		}
+		
+		if(s.isEmpty() ) {
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
+	public static boolean esAlfanumérico(String s) {
+		if(esVacío(s)) {
+			return false;
+		}
+				
+		if(s.matches("^[a-zA-Z0-9]*$")) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public static boolean esNúmeroPositivo(String s) {
+		if(esVacío(s)) {
+			return false;
+		}
+				
+		if(s.matches("^[0-9]*$")) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public  boolean distribuidorSeleccionado() {
+		
+		if(medicamentoDistribuidorRadioButton_1.isSelected()) {
+			return true;
+		}
+		
+		if(medicamentoDistribuidorRadioButton_2.isSelected()) {
+			return true;
+		}
+		
+		if(medicamentoDistribuidorRadioButton_3.isSelected()) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public  boolean destinoSeleccionado() {
+		
+		if(medicamentoEntregaSucursalPrincipalCheckBox.isSelected()) {
+			return true;
+		}
+		
+		if(medicamentoEntregaSucursalSecundariaCheckBox.isSelected()) {
+			return true;
+		}
+		
+		
+		return false;
+	}
+	
+	
+	public String obtenerTipoMedicamento() {
+		return (String) medicamentoTipoComboBox.getSelectedItem();
+	}
+	
+	public String obtenerDistribuidor() {
+		
+		if(medicamentoDistribuidorRadioButton_1.isSelected()) {
+			return medicamentoDistribuidorRadioButton_1.getText();
+		}
+		
+		if(medicamentoDistribuidorRadioButton_2.isSelected()) {
+			return medicamentoDistribuidorRadioButton_2.getText();
+		}
+		
+		if(medicamentoDistribuidorRadioButton_3.isSelected()) {
+			return medicamentoDistribuidorRadioButton_3.getText();
+		}
+		
+		return "";
+	}
+	
+	public String obtenerDestino() {
+		String output = new String(" para la farmacia situada en ");
+		Boolean previaDirección =false;
+		
+		if(medicamentoEntregaSucursalPrincipalCheckBox.isSelected()) {
+			output = output + "calle de la Rosa n. 28";
+			previaDirección = true;
+		}
+		
+		if(medicamentoEntregaSucursalSecundariaCheckBox.isSelected()) {
+			
+			if(previaDirección) {
+				output = output + " y para la situada en calle Alcazabilla n. 3.";
+			}else {
+				output =  output + "calle Alcazabilla n. 3.";
+			}
+		}
+		
+		return output;
+	}
+	
+	public String[] obtenerResumen() {
+		return new String [] {obtenerDistribuidor(), medicamentoCantidadTextField.getText(), obtenerTipoMedicamento(), medicamentoNombreTextField.getText(),obtenerDestino()};
+		
+	}
+	
+	
+	
+	
+	public static void setTimeout(Runnable runnable, int delay){
+	    new Thread(() -> {
+	        try {
+	            Thread.sleep(delay);
+	            runnable.run();
+	        }
+	        catch (Exception e){
+	            System.err.println(e);
+	        }
+	    }).start();
 	}
 
 }
